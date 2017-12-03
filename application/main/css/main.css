@@ -1,0 +1,128 @@
+#div_map{
+    height: 100%;
+    width: 100%;
+    z-index: 50;
+    position: fixed;
+}
+
+#selected{
+    z-index: 999;
+    top: 20px;
+    right: 5px;
+    position: fixed;
+    width: 20%;
+}
+
+#sel{
+    z-index: 999;
+    top: 200px;
+    left: 5px;
+    position: fixed;
+    width: 20%;
+}
+
+/*.mainContainer{*/
+    /*right: 10px;*/
+    /*top: 10px;*/
+    /*z-index: 1000;*/
+    /*position: fixed;*/
+/*}*/
+
+/*.tools_top{*/
+    /*float: right;*/
+    /*margin-right: 5px;*/
+/*}*/
+
+/*.delete{*/
+    /*float: right;*/
+/*}*/
+
+.layers{
+    right: 5px;
+    bottom: 20px;
+    max-height: 500px;
+    z-index: 1000;
+    position: fixed;
+    min-width: 300px;
+    /*min-width: 500px;*/
+}
+
+/*.tools{*/
+    /*padding: 220px;*/
+    /*top: 0; right: 0;*/
+    /*left: 0;*/
+    /*border: 1px solid black;*/
+    /*display: block;*/
+    /*overflow:auto;*/
+    /*background: #5560d4;*/
+/*}*/
+
+/*[type="checkbox"]:checked + label:before {*/
+    /*top: -4px;*/
+    /*left: -5px;*/
+    /*width: 12px;*/
+    /*height: 22px;*/
+    /*border-top: 2px solid transparent;*/
+    /*border-left: 2px solid transparent;*/
+    /*border-right: 2px solid #5560d4;*/
+    /*border-bottom: 2px solid #5560d4;*/
+    /*-webkit-transform: rotate(40deg);*/
+    /*transform: rotate(40deg);*/
+    /*-webkit-backface-visibility: hidden;*/
+    /*backface-visibility: hidden;*/
+    /*-webkit-transform-origin: 100% 100%;*/
+    /*transform-origin: 100% 100%;*/
+/*}*/
+
+.pre-scrollable {
+    max-height: 340px;
+    overflow-y: scroll;
+}
+
+.fixed-action-btn {
+    position: fixed;
+    left: 23px;
+    top: 23px;
+    right: unset;
+    bottom: unset;
+    padding-top: 15px;
+    margin-top: 0;
+    margin-bottom: unset;
+    z-index: 997;
+}
+
+.fixed-action-btn.horizontal ul {
+    text-align: left;
+    left: 90px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    /*left: auto;*/
+    right:auto;
+    width: 320px;
+    /*width 100% only goes to width of button container */
+}
+
+
+.fixed-action-btn.horizontal ul li {
+    display: inline-block;
+    margin: 15px 10px 0 0;
+}
+
+ .ol-dragbox {
+     background-color: rgba(255,255,255,0.4);
+     /*border-color: rgba(100,150,0,1);*/
+     border: solid 2px rgba(100,150,0,1);
+ }
+
+ .ol-zoom{
+     z-index: 2;
+     position: fixed;
+ }
+
+.ol-full-screen{
+    z-index: 2;
+    position: fixed;
+    right:.5em;
+    top:.5em;
+}

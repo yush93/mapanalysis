@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="application/main/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+
+
+    <script type="text/javascript" src="application/main/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="application/main/js/materialize.min.js"></script>
+</head>
+<body>
+<div id="optBox" class="input-field">
+    <select id="opt">
+        <option value="" disabled selected>Select Type</option>
+        <option value="1">shp</option>
+        <option value="2">kml</option>
+        <option value="3">GeoJSON</option>
+    </select>
+    <label for="opt">Select to Download</label>
+</div>
+<script>
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+</script>
+</body>
+</html>
