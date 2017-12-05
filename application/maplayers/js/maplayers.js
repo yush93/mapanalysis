@@ -1,32 +1,11 @@
 var URL = "http://localhost:9090/geoserver/learning_Workspace/wms";
 
 var osmMap = new ol.layer.Tile({
+    name: 'Base Map',
     source: new ol.source.OSM(), //Calls function to load osmMap from openlayer
     visible: true,
     isBaseLayer: true
 });
-
-// var districts = new ol.layer.Tile({
-//     source: new ol.source.TileWMS({
-//         url: URL,
-//         serverType: 'geoserver',
-//         params: {'LAYERS': 'learning_Workspace:Districts'}
-//     }),
-//     name: 'Districts Boundaries',
-//     isBaseLayer: false,
-//     visible: false
-// });
-//
-// var chitwan = new ol.layer.Tile({
-//     source: new ol.source.TileWMS({
-//         url: URL,
-//         serverType: 'geoserver',
-//         params: {'LAYERS':'learning_Workspace:Chitwan'}
-//     }),
-//     name: 'Chitwan Arsenic Data',
-//     isBaseLayer: false,
-//     visible: true
-// });
 
 var style = new ol.style.Style({
     fill: new ol.style.Fill({
@@ -48,9 +27,10 @@ var style = new ol.style.Style({
     })
 });
 
+var districtsURL = 'http://localhost:9090/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&typeNames=learning_Workspace:Districts&outputFormat=json';
 
 var sourceDistricts = new ol.source.Vector({
-    url: 'http://localhost:9090/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&typeNames=learning_Workspace:Districts&outputFormat=application/json',
+    url: districtsURL,
     // url: 'districts.json', // for local file
     format: new ol.format.GeoJSON()
     // crossOrigin: 'Anonymous'
@@ -78,11 +58,13 @@ var vectorDistricts = new ol.layer.Vector({
     style: function(feature) {
         style.getText().setText(feature.get('DISTRICT'));
         return style;
-    }
+    },
+    visible: false
 });
 
+var chitwanURL = 'http://localhost:9090/geoserver/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=learning_Workspace:ChitwanFew&outputFormat=json';
 var sourceChitwan = new ol.source.Vector({
-    url: 'http://localhost:9090/geoserver/wfs?request=GetFeature&service=WFS&version=2.0.0&typeName=learning_Workspace:Chitwan&outputFormat=json',
+    url: chitwanURL,
     format: new ol.format.GeoJSON()
     // crossOrigin: 'Anonymous'
 });
@@ -103,7 +85,8 @@ var sourceChitwan = new ol.source.Vector({
 
 var vectorChitwan = new ol.layer.Vector({
     source: sourceChitwan,
-    name: "Chitwan Arsenic Data"
+    name: "Chitwan Arsenic Data",
+    visible: false
 
 });
 
@@ -116,6 +99,7 @@ var drawVector = new ol.layer.Vector({
 var mySelectionsSource = new ol.source.Vector({wrapX: false});
 
 var mySelectionsVector = new ol.layer.Vector({
+    name: 'Selection Layer',
     source: mySelectionsSource,
     style: new ol.style.Style({
         fill: new ol.style.Fill({
@@ -127,8 +111,12 @@ var mySelectionsVector = new ol.layer.Vector({
         }),
         image: new ol.style.Circle({
             radius: 7,
+            stroke: ol.style.Stroke({
+                width: 2,
+                color: 'rgba(255, 0, 0, 1)'
+            }),
             fill: new ol.style.Fill({
-                color: '#ffcc33'
+                color: 'rgba(255, 0, 0, 1)'
             })
         })
     })

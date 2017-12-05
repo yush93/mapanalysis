@@ -96,12 +96,35 @@ include "includes/tools.html";
                     </ul>
                     <div id="optBox" class="input-field">
                         <select id="opt">
-                            <option value="" selected>Select Type</option>
+                            <option value="" disabled selected>Select Type</option>
                             <option value="1">shp</option>
                             <option value="2">kml</option>
                             <option value="3">GeoJSON</option>
                         </select>
                         <label for="opt">Select to Download</label>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header blue-grey white-text"><i class="material-icons white-text">layers</i>Selected
+                    Feature(s)
+                </div>
+                <div class="collapsible-body" style="background-color: rgba(255, 255, 255, 0.8); padding: 5px">
+                    <ul class="pre-scrollable" style="padding-left: 5px; padding-right: 5px" id="selectedVal">
+                    </ul>
+                    <div id="optBox1" class="pre-scrollable">
+                        <p>
+                        <input name="group1" type="radio" id="test1" />
+                        <label for="test1">Red</label>
+                        </p>
+                        <p>
+                        <input name="group1" type="radio" id="test2" />
+                        <label for="test2">Red</label>
+                        </p>
+                        <p>
+                        <input name="group1" type="radio" id="test3" />
+                        <label for="test3">Red</label>
+                        </p>
                     </div>
                 </div>
             </li>
@@ -116,7 +139,10 @@ include "includes/tools.html";
     </div>
 </div>
 <script>
+    var downloadURL = '';
     $(document).ready(function () {
+
+
         //Material Design Initialization
         $('#opt').material_select();
 
@@ -126,25 +152,30 @@ include "includes/tools.html";
         for (var i = 0; i < layer_array.length; i++) {
             var lid = layer_array[i].get('name').toLowerCase().split(' ').join('');
             var displayName = layer_array[i].get('name');
-            var vab = "<li style='margin-bottom: 5px;'><input class='checks' type='checkbox' value='" + i + "' id='" + lid + "'> " +
-                "<label class='black-text' for='" + lid + "'>" + displayName + "</label></li>";
+//            var vab = "<li style='margin-bottom: 5px;'><input class='checks' type='checkbox' value='" + i + "' id='" + lid + "'> " +
+//                "<label class='black-text' for='" + lid + "'>" + displayName + "</label></li>";
+            var vab = "<p><input class='checks' name='group1' type='radio' value='" + i + "' id='" + lid + "'> " +
+                "<label class='black-text' for='" + lid + "'>" + displayName + "</label></p>";
             $('#layer_items').append(vab);
         }
 
         $('.checks').change(function () {
+            mySelectionsSource.clear();
+            $.each(layer_array, function (index, layer) {
+                map.removeLayer(layer);
+                layer.setVisible(false);
+            });
+            map.removeOverlay(overlay);
             var i = $(this).val();
             if ($(this).prop('checked')) {
                 map.addLayer(layer_array[i]);
-//                dragBox.setActive(true);
                 map.addOverlay(overlay);
-            } else {
-//                dragBox.setActive(false);
-                map.removeLayer(layer_array[i]);
-//                selectedFeatures.clear();
-                map.removeOverlay(overlay);
+                layer_array[i].setVisible(true);
+                if(i == 0)
+                    downloadURL = districtsURL.slice(0,-18);
+                else if(i == 1)
+                    downloadURL = chitwanURL.slice(0,-18);
             }
-
-
         });
 
         //To cancel the current selection action
@@ -165,30 +196,39 @@ include "includes/tools.html";
                 dataArr.push(larArr[i].getId());
             }
             var data = dataArr.toString();
+
+
+
             switch (optVal) {
                 case "1":
                     $.ajax({
                         type: 'POST',
-                        url: 'http://localhost:9090/geoserver/wfs',
+                        url: downloadURL,
                         data: {
-                            service: 'wfs',
-                            version: '2.0.0',
-                            request: 'GetFeature',
-                            typeNames: 'learning_Workspace:Districts',
                             featureId: data,
                             outputFormat: 'shape-zip'
                         }
                     });
                     break;
+//                case "1":
+//                    $.ajax({
+//                        type: 'POST',
+//                        url: 'http://localhost:9090/geoserver/wfs',
+//                        data: {
+//                            service: 'wfs',
+//                            version: '2.0.0',
+//                            request: 'GetFeature',
+//                            typeNames: 'learning_Workspace:Districts',
+//                            featureId: data,
+//                            outputFormat: 'shape-zip'
+//                        }
+//                    });
+//                    break;
                 case "2":
                     $.ajax({
                         type: 'GET',
-                        url: 'http://localhost:9090/geoserver/wfs',
+                        url: downloadURL,
                         data: {
-                            service: 'wfs',
-                            version: '2.0.0',
-                            request: 'GetFeature',
-                            typeNames: 'learning_Workspace:Districts',
                             featureId: data,
                             outputFormat: 'kml'
                         },
@@ -211,15 +251,41 @@ include "includes/tools.html";
                         }
                     });
                     break;
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: 'http://localhost:9090/geoserver/wfs',
+//                        data: {
+//                            service: 'wfs',
+//                            version: '2.0.0',
+//                            request: 'GetFeature',
+//                            typeNames: 'learning_Workspace:Districts',
+//                            featureId: data,
+//                            outputFormat: 'kml'
+//                        },
+//                        success: function (response) {
+//                            var s = new XMLSerializer();
+//                            var xmlString = s.serializeToString(response);
+//                            var parser = new DOMParser();
+//                            var xmlDoc = parser.parseFromString(xmlString,"text/xml");
+//
+//                            var x = xmlDoc.getElementsByTagName("Schema")[0];
+//                            var name = x.getAttribute("name").split("_")[0];
+//                            var data = "text/xml;charset=utf-8," + encodeURIComponent(xmlString);
+//                            var a = document.createElement('a');
+//                            a.href = 'data:' + data;
+//                            a.download = name + '.kml';
+//                            a.click();
+//                        },
+//                        error: function (data) {
+//                            alert('error');
+//                        }
+//                    });
+//                    break;
                 case "3":
                     $.ajax({
                         type: 'GET',
-                        url: 'http://localhost:9090/geoserver/wfs',
+                        url: downloadURL,
                         data: {
-                            service: 'wfs',
-                            version: '2.0.0',
-                            request: 'GetFeature',
-                            typeNames: 'learning_Workspace:Districts',
                             featureId: data,
                             outputFormat: 'application/json'
                         },
@@ -238,6 +304,32 @@ include "includes/tools.html";
                         }
                     });
                     break;
+//                    $.ajax({
+//                        type: 'GET',
+//                        url: 'http://localhost:9090/geoserver/wfs',
+//                        data: {
+//                            service: 'wfs',
+//                            version: '2.0.0',
+//                            request: 'GetFeature',
+//                            typeNames: 'learning_Workspace:Districts',
+//                            featureId: data,
+//                            outputFormat: 'application/json'
+//                        },
+//                        success: function (response) {
+//                            var json = JSON.stringify(response);
+//                            var names = JSON.parse(json)['features'][0]['id'];
+//                            var name = names.split(".")[0];
+//                            var data = "text/json;charset=utf-8," + encodeURIComponent(json);
+//                            var a = document.createElement('a');
+//                            a.href = 'data:' + data;
+//                            a.download = name + '.json';
+//                            a.click();
+//                        },
+//                        error: function (data) {
+//                            alert('error');
+//                        }
+//                    });
+//                    break;
             }
         });
     });

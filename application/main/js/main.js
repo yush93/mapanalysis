@@ -9,9 +9,8 @@ var newCenterPos = ol.proj.transform(centerpos, 'EPSG:4326', 'EPSG:900913');
 
 var mapExtent = [minX, minY, maxX, maxY];
 
-
 var map = new ol.Map({
-    layers: [osmMap, drawVector, vectorDistricts, mySelectionsVector],
+    layers: [osmMap, drawVector, mySelectionsVector],
     target: 'div_map',
     interactions: ol.interaction.defaults({altShiftDragRotate:false, pinchRotate:false}),
 	// interactions: ol.interaction.defaults().extend([
@@ -20,7 +19,6 @@ var map = new ol.Map({
 
 	controls: ol.control.defaults().extend([
 		new ol.control.OverviewMap(),
-        new ol.control.OverviewMap(),
         new ol.control.MousePosition({
             coordinateFormat: ol.coordinate.createStringXY(4),
             projection: 'EPSG:4326',

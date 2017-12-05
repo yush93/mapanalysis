@@ -130,13 +130,26 @@ $('.tool').click(function () {
         mySelectionsSource.clear();
         var extent = e.feature.getGeometry().getExtent();
         var geomA = e.feature.getGeometry();
-        sourceDistricts.forEachFeatureInExtent(extent, function (feature) {
+
+        var visibleLayer = map.getLayers().getArray()[3];
+        var source = visibleLayer.getSource();
+
+        source.forEachFeatureInExtent(extent, function (feature) {
             if (polyIntersectsPoly(geomA, feature.getGeometry()) === true) {
                 mySelectionsSource.addFeature(feature);
                 larArr.push(feature);
+
                 // alert(feature.getId());
             }
         });
+
+        // sourceDistricts.forEachFeatureInExtent(extent, function (feature) {
+        //     if (polyIntersectsPoly(geomA, feature.getGeometry()) === true) {
+        //         mySelectionsSource.addFeature(feature);
+        //         larArr.push(feature);
+        //         // alert(feature.getId());
+        //     }
+        // });
 
         list();
         drawSource.clear();
